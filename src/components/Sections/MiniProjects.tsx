@@ -119,7 +119,7 @@ const MiniProjects = ({ onOpenModal }: MiniProjectsProps) => {
           {/* Top Row: Moves Left */}
           <motion.div
             animate={{ x: [0, "-50%"] }}
-            transition={{ ease: "linear", duration: 200, repeat: Infinity }}
+            transition={{ ease: "linear", duration: 100, repeat: Infinity }}
             className="flex w-max group-hover:[animation-play-state:paused]"
           >
             {[...topRow, ...topRow, ...topRow, ...topRow, ...topRow, ...topRow].map((project, idx) => (
