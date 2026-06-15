@@ -22,9 +22,9 @@ import ResumeModal from '../components/ui/ResumeModal';
 function AppMobile() {
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('portfolio-theme') || 'light';
+      return localStorage.getItem('portfolio-theme') || 'dark';
     }
-    return 'light';
+    return 'dark';
   });
 
   useEffect(() => {
