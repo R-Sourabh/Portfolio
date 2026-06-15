@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { personalInfo } from '../../data/portfolio';
 import Magnetic from '../ui/Magnetic';
 import { ChevronRight, Download } from 'lucide-react';
@@ -11,6 +11,7 @@ interface HeroProps {
 }
 
 const PerspectiveText = ({ text }: { text: string }) => {
+  const [hoveredIndex, setHoveredIndex] = React.useState<number | null>(null);
   const chars = text.toUpperCase().split("");
   const total = chars.length;
   const centerX = (total - 1) / 2;
@@ -20,10 +21,32 @@ const PerspectiveText = ({ text }: { text: string }) => {
       {chars.map((char, index) => {
         const diff = index - centerX;
         const distanceToCenter = Math.abs(diff);
-        const zIndex = Math.round((centerX - distanceToCenter) * 10);
 
-        // Depth steps for the 3D extrusion
-        const depth = 16;
+        // Calculate dynamic depth and transform variables based on hover state
+        let depth = 16;
+        let liftY = 0;
+        let scale = 1;
+
+        if (hoveredIndex !== null) {
+          const distToHover = Math.abs(index - hoveredIndex);
+          if (distToHover === 0) {
+            depth = 32;     // Double the depth to unfold the 3D block
+            liftY = -24;    // Move up significantly
+            scale = 1.15;   // Scale up
+          } else if (distToHover === 1) {
+            depth = 24;     // Medium unfold for direct neighbors
+            liftY = -12;
+            scale = 1.07;
+          } else if (distToHover === 2) {
+            depth = 19;     // Subtle unfold for secondary neighbors
+            liftY = -5;
+            scale = 1.02;
+          } else {
+            depth = 12;     // Subtly contract distant letters to make the hovered one pop more
+            liftY = 2;
+          }
+        }
+
         const xFactor = 0.45; // control horizontal convergence rate
         const yFactor = 0.9;  // control vertical extrusion height
 
@@ -53,15 +76,24 @@ const PerspectiveText = ({ text }: { text: string }) => {
         const finalSy = (-depth * yFactor - 4).toFixed(2);
         shadowString += `, ${finalSx}px ${finalSy}px 12px rgba(0,0,0,0.5)`;
 
+        // Elevate hovered elements to be rendered on top of neighbors
+        const baseZIndex = Math.round((centerX - distanceToCenter) * 10);
+        const zIndex = hoveredIndex !== null && Math.abs(index - hoveredIndex) <= 2
+          ? baseZIndex + 100 - Math.abs(index - hoveredIndex) * 20
+          : baseZIndex;
+
         return (
           <span
             key={index}
+            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseLeave={() => setHoveredIndex(null)}
             style={{
               textShadow: shadowString,
-              transform: `rotate(${diff * 0.4}deg)`, // subtle fan-out rotation like varsity arches
+              transform: `translateY(${liftY}px) scale(${scale}) rotate(${diff * 0.4}deg)`,
               zIndex: zIndex,
+              transition: 'text-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
-            className="relative inline-block text-white font-black font-display tracking-tight uppercase select-none transition-transform hover:-translate-y-4 hover:scale-110 duration-200"
+            className="relative inline-block text-white font-black font-display tracking-tight uppercase select-none cursor-pointer"
           >
             {char}
           </span>
@@ -76,8 +108,34 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
   const firstName = nameParts[0] || 'SOURABH';
   const lastName = nameParts.slice(1).join(' ') || 'RAGHUWANSHI';
 
+  // 3D Parallax Tilt coordinates (-0.5 to 0.5 range)
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  // Smooth springs for rotation values
+  const springConfig = { stiffness: 100, damping: 20 };
+  const rxSpring = useSpring(useTransform(y, [-0.5, 0.5], [10, -10]), springConfig);
+  const rySpring = useSpring(useTransform(x, [-0.5, 0.5], [-10, 10]), springConfig);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left - rect.width / 2;
+    const mouseY = e.clientY - rect.top - rect.height / 2;
+    x.set(mouseX / rect.width);
+    y.set(mouseY / rect.height);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+    <section
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden"
+    >
       {/* Background Decorative Element */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
 
@@ -90,17 +148,22 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
           <span className="inline-block py-1 px-3 bg-accent/10 text-accent text-xs font-bold tracking-widest uppercase rounded-full border border-accent/20 mb-6">
             Available for new opportunities
           </span>
-          <div className="mb-8 select-none">
-            <span className="block text-xl md:text-2xl font-display font-medium text-muted-foreground tracking-widest uppercase mb-1">
+          <div className="mb-8 select-none perspective-1000">
+            <span className="mb-8 block text-xl md:text-2xl font-display font-medium text-muted-foreground tracking-widest uppercase mb-1">
               Hi, I&apos;m
             </span>
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.8 }}
-              className="flex flex-col items-center justify-center py-6 w-full max-w-full overflow-hidden"
+              style={{
+                rotateX: rxSpring,
+                rotateY: rySpring,
+                transformStyle: "preserve-3d",
+              }}
+              className="flex flex-col items-center justify-center py-6 w-full max-w-full"
             >
-              <h1 className="text-4xl sm:text-6xl md:text-[80px] lg:text-[95px] leading-none tracking-normal flex flex-col items-center gap-0 md:gap-1">
+              <h1 className="text-4xl sm:text-6xl md:text-[80px] lg:text-[95px] leading-none tracking-normal flex flex-col items-center gap-0 md:gap-1" style={{ transform: "translateZ(50px)" }}>
                 <PerspectiveText text={firstName} />
                 <PerspectiveText text={lastName} />
               </h1>
