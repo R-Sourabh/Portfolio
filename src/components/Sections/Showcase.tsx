@@ -66,12 +66,12 @@ const Showcase = ({ onOpenModal }: ShowcaseProps) => {
               <a
                 key={cat.id}
                 href={`#${cat.id}`}
-                className="group relative flex flex-col items-center"
+                className="group relative py-1"
               >
                 <span className="text-sm md:text-lg font-display font-semibold text-muted group-hover:text-accent transition-colors duration-300 whitespace-nowrap">
                   {cat.name}
                 </span>
-                <div className="w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300 mt-2" />
+                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300" />
               </a>
             ))}
           </div>
