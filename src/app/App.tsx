@@ -49,7 +49,7 @@ function App() {
     data: null,
     type: null,
   });
-  
+
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
 
   const openModal = (data: any, type: string) => {
@@ -85,7 +85,7 @@ function App() {
       <div className="bg-background text-foreground selection:bg-accent/30 selection:text-accent">
         <CustomCursor />
         <Navbar theme={theme} toggleTheme={toggleTheme} onOpenResumeModal={() => setIsResumeModalOpen(true)} />
-        
+
         <main>
           <Hero onOpenResumeModal={() => setIsResumeModalOpen(true)} />
           <About />
@@ -101,7 +101,7 @@ function App() {
 
         <Footer />
 
-        <GlobalModal 
+        <GlobalModal
           isOpen={modalConfig.isOpen}
           onClose={closeModal}
           data={modalConfig.data}
@@ -110,12 +110,12 @@ function App() {
           onShowSnackbar={showSnackbar}
         />
 
-        <Snackbar 
+        <Snackbar
           isOpen={snackbarConfig.isOpen}
           message={snackbarConfig.message}
           onClose={closeSnackbar}
         />
-        
+
         <ResumeModal isOpen={isResumeModalOpen} onClose={() => setIsResumeModalOpen(false)} />
       </div>
     </ScrollWrapper>

@@ -10,7 +10,72 @@ interface HeroProps {
   onOpenResumeModal: () => void;
 }
 
+const PerspectiveText = ({ text }: { text: string }) => {
+  const chars = text.toUpperCase().split("");
+  const total = chars.length;
+  const centerX = (total - 1) / 2;
+
+  return (
+    <span className="inline-flex justify-center whitespace-nowrap gap-x-2 md:gap-x-3.5 py-1 px-4">
+      {chars.map((char, index) => {
+        const diff = index - centerX;
+        const distanceToCenter = Math.abs(diff);
+        const zIndex = Math.round((centerX - distanceToCenter) * 10);
+
+        // Depth steps for the 3D extrusion
+        const depth = 16;
+        const xFactor = 0.45; // control horizontal convergence rate
+        const yFactor = 0.9;  // control vertical extrusion height
+
+        let shadowString = "";
+
+        // 1. First, create a tight outline around the letter itself so it is crisp
+        shadowString += `-1.5px -1.5px 0 var(--retro-outline-face), 1.5px -1.5px 0 var(--retro-outline-face), -1.5px 1.5px 0 var(--retro-outline-face), 1.5px 1.5px 0 var(--retro-outline-face)`;
+
+        // 2. Then, build the 3D extrusion path pointing upwards and inwards towards the center
+        for (let s = 1; s <= depth; s++) {
+          const sx = (-diff * s * xFactor).toFixed(2);
+          const sy = (-s * yFactor).toFixed(2);
+
+          shadowString += `, ${sx}px ${sy}px 0 hsl(var(--accent))`;
+
+          // Add an outer casing outline less frequently to keep the 3D block bright and prevent outline overlap
+          if (s % 3 === 0 || s === depth) {
+            shadowString += `, calc(${sx}px - 1.5px) calc(${sy}px - 1.5px) 0 var(--retro-outline-extrusion)`;
+            shadowString += `, calc(${sx}px + 1.5px) calc(${sy}px - 1.5px) 0 var(--retro-outline-extrusion)`;
+            shadowString += `, calc(${sx}px - 1.5px) calc(${sy}px + 1.5px) 0 var(--retro-outline-extrusion)`;
+            shadowString += `, calc(${sx}px + 1.5px) calc(${sy}px + 1.5px) 0 var(--retro-outline-extrusion)`;
+          }
+        }
+
+        // Add a final ambient drop shadow at the end
+        const finalSx = (-diff * depth * xFactor).toFixed(2);
+        const finalSy = (-depth * yFactor - 4).toFixed(2);
+        shadowString += `, ${finalSx}px ${finalSy}px 12px rgba(0,0,0,0.5)`;
+
+        return (
+          <span
+            key={index}
+            style={{
+              textShadow: shadowString,
+              transform: `rotate(${diff * 0.4}deg)`, // subtle fan-out rotation like varsity arches
+              zIndex: zIndex,
+            }}
+            className="relative inline-block text-white font-black font-display tracking-tight uppercase select-none transition-transform hover:-translate-y-4 hover:scale-110 duration-200"
+          >
+            {char}
+          </span>
+        );
+      })}
+    </span>
+  );
+};
+
 const Hero = ({ onOpenResumeModal }: HeroProps) => {
+  const nameParts = personalInfo.name.toUpperCase().split(' ');
+  const firstName = nameParts[0] || 'SOURABH';
+  const lastName = nameParts.slice(1).join(' ') || 'RAGHUWANSHI';
+
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
       {/* Background Decorative Element */}
@@ -25,9 +90,22 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
           <span className="inline-block py-1 px-3 bg-accent/10 text-accent text-xs font-bold tracking-widest uppercase rounded-full border border-accent/20 mb-6">
             Available for new opportunities
           </span>
-          <h1 className="text-5xl md:text-7xl font-display font-bold mb-6 tracking-tight">
-            Hi, I&apos;m <span className="text-gradient">{personalInfo.name}</span>
-          </h1>
+          <div className="mb-8 select-none">
+            <span className="block text-xl md:text-2xl font-display font-medium text-muted-foreground tracking-widest uppercase mb-1">
+              Hi, I&apos;m
+            </span>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              className="flex flex-col items-center justify-center py-6 w-full max-w-full overflow-hidden"
+            >
+              <h1 className="text-4xl sm:text-6xl md:text-[80px] lg:text-[95px] leading-none tracking-normal flex flex-col items-center gap-0 md:gap-1">
+                <PerspectiveText text={firstName} />
+                <PerspectiveText text={lastName} />
+              </h1>
+            </motion.div>
+          </div>
           <div className="max-w-3xl mx-auto mb-12">
             <p className="text-2xl md:text-3xl font-display font-medium text-foreground leading-tight px-6 py-4 border-l-4 border-accent bg-accent/5 italic rounded-r-2xl text-left">
               &ldquo;{personalInfo.tagline}&rdquo;
@@ -45,7 +123,7 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
               </a>
             </Magnetic>
             <Magnetic strength={0.3}>
-              <button 
+              <button
                 onClick={onOpenResumeModal}
                 className="flex items-center gap-2 px-8 py-4 bg-foreground/5 border border-foreground/10 hover:bg-foreground/10 text-foreground rounded-full font-bold transition-all"
               >

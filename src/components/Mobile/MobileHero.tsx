@@ -20,9 +20,9 @@ const MobileHero = ({ onOpenResumeModal }: MobileHeroProps) => {
 
   const itemVariants: Variants = {
     hidden: { opacity: 0, y: 30, filter: 'blur(10px)' },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
+    visible: {
+      opacity: 1,
+      y: 0,
       filter: 'blur(0px)',
       transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
     }
@@ -31,13 +31,13 @@ const MobileHero = ({ onOpenResumeModal }: MobileHeroProps) => {
   return (
     <section className="relative min-h-[90vh] flex flex-col justify-center pt-24 pb-12 overflow-hidden bg-background">
       {/* Background Decorative Element */}
-      <motion.div 
+      <motion.div
         animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[300px] h-[300px] bg-accent/20 rounded-full blur-[100px] pointer-events-none" 
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[300px] h-[300px] bg-accent/20 rounded-full blur-[100px] pointer-events-none"
       />
 
-      <motion.div 
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -50,10 +50,14 @@ const MobileHero = ({ onOpenResumeModal }: MobileHeroProps) => {
           </span>
         </motion.div>
 
-        <motion.h1 variants={itemVariants} className="text-5xl sm:text-6xl font-display font-medium tracking-tighter leading-[1.1] mb-6">
-          Hi, I&apos;m <br/>
-          <span className="text-transparent bg-clip-text bg-gradient-to-br from-accent via-accent to-accent/50">
-            {personalInfo.name}
+        <motion.h1 variants={itemVariants} className="text-5xl sm:text-6xl font-display font-bold mb-6 tracking-tight">
+          Hi, I&apos;m{" "}
+          <span className="relative inline-block">
+            <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-accent to-purple-400 font-extrabold">
+              Sourabh Raghuwanshi
+            </span>
+            {/* Subtle custom bottom glow banner */}
+            <span className="absolute bottom-1 left-0 w-full h-[25%] bg-accent/10 rounded-sm -z-10 blur-xs" />
           </span>
         </motion.h1>
 
@@ -71,7 +75,7 @@ const MobileHero = ({ onOpenResumeModal }: MobileHeroProps) => {
             Explore Work
             <ChevronRight size={18} className="opacity-70" />
           </a>
-          <button 
+          <button
             onClick={onOpenResumeModal}
             className="w-full flex items-center justify-between px-8 py-4 bg-foreground/5 border border-foreground/10 text-foreground rounded-2xl font-bold active:scale-95 transition-transform hover:bg-foreground/10"
           >

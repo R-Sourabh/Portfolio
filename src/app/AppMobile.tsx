@@ -49,7 +49,7 @@ function AppMobile() {
     data: null,
     type: null,
   });
-  
+
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
 
   const openModal = (data: any, type: string) => {
@@ -83,7 +83,7 @@ function AppMobile() {
   return (
     <div className="bg-background text-foreground selection:bg-accent/30 selection:text-accent overflow-x-hidden w-full max-w-[100vw]">
       <MobileNavbar theme={theme} toggleTheme={toggleTheme} onOpenResumeModal={() => setIsResumeModalOpen(true)} />
-      
+
       <main className="overflow-x-hidden w-full">
         <MobileHero onOpenResumeModal={() => setIsResumeModalOpen(true)} />
         <About />
@@ -99,7 +99,7 @@ function AppMobile() {
 
       <Footer />
 
-      <GlobalModal 
+      <GlobalModal
         isOpen={modalConfig.isOpen}
         onClose={closeModal}
         data={modalConfig.data}
@@ -108,12 +108,12 @@ function AppMobile() {
         onShowSnackbar={showSnackbar}
       />
 
-      <Snackbar 
+      <Snackbar
         isOpen={snackbarConfig.isOpen}
         message={snackbarConfig.message}
         onClose={closeSnackbar}
       />
-      
+
       <ResumeModal isOpen={isResumeModalOpen} onClose={() => setIsResumeModalOpen(false)} />
     </div>
   );
