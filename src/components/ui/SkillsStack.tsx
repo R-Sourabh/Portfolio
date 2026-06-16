@@ -340,7 +340,7 @@ export default function SkillsStack({ onOpenModal }: SkillsStackProps) {
         </button>
 
         <p className="text-[10px] font-bold text-muted/50 uppercase tracking-[0.15em] cursor-default text-center animate-pulse">
-          Click and slide upwards to move to the next card
+          Click and swipe up to move to the next card
         </p>
       </div>
     </div>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Outfit:wght@400;500;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Outfit:wght@400;500;700;800&family=Lilita+One&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -114,6 +114,102 @@
 
   .font-cursive {
     font-family: 'Dancing Script', cursive;
+  }
+
+  .bubble-text-3d {
+    position: relative;
+    display: inline-block;
+    font-family: 'Lilita One', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    background: linear-gradient(to bottom, #F5F3FF 0%, #A78BFA 50%, #7C3AED 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .bubble-text-3d::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    -webkit-text-fill-color: #120024;
+    text-shadow:
+      /* Outline */
+      -2px -2px 0 #120024,
+      2px -2px 0 #120024,
+      -2px 2px 0 #120024,
+      2px 2px 0 #120024,
+      -2px 0px 0 #120024,
+      2px 0px 0 #120024,
+      0px -2px 0 #120024,
+      0px 2px 0 #120024,
+      -1px -1px 0 #120024,
+      1px -1px 0 #120024,
+      -1px 1px 0 #120024,
+      1px 1px 0 #120024,
+
+      /* 3D Depth */
+      1px 1px 0 #120024,
+      2px 2px 0 #120024,
+      3px 3px 0 #120024,
+      4px 4px 0 #120024,
+      5px 5px 0 #120024,
+
+      /* Dropshadow */
+      5px 8px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .bubble-text-3d-white {
+    position: relative;
+    display: inline-block;
+    font-family: 'Lilita One', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    background: linear-gradient(to bottom, #FFFFFF 0%, #ECECF1 60%, #D8D8DF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .bubble-text-3d-white::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    -webkit-text-fill-color: #120024;
+    text-shadow:
+      /* Outline */
+      -2px -2px 0 #120024,
+      2px -2px 0 #120024,
+      -2px 2px 0 #120024,
+      2px 2px 0 #120024,
+      -2px 0px 0 #120024,
+      2px 0px 0 #120024,
+      0px -2px 0 #120024,
+      0px 2px 0 #120024,
+      -1px -1px 0 #120024,
+      1px -1px 0 #120024,
+      -1px 1px 0 #120024,
+      1px 1px 0 #120024,
+
+      /* 3D Depth */
+      1px 1px 0 #120024,
+      2px 2px 0 #120024,
+      3px 3px 0 #120024,
+      4px 4px 0 #120024,
+      5px 5px 0 #120024,
+
+      /* Dropshadow */
+      5px 8px 10px rgba(0, 0, 0, 0.5);
   }
 }
 

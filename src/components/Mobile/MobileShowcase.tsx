@@ -20,7 +20,7 @@ export default function MobileShowcase({ onOpenModal }: MobileShowcaseProps) {
         list.push(...projects[cat]);
       }
     });
-    return [...list].reverse(); // Reverse for correct stacking order
+    return [...list]; // Do not reverse, so NutShell AI is at index 0 (top of stack)
   });
 
   // Cycle the top card to the back

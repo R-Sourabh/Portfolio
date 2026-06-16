@@ -30,7 +30,7 @@ const Navbar = ({ theme, toggleTheme, onOpenResumeModal }: NavbarProps) => {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'py-4 bg-background/80 backdrop-blur-lg border-b border-foreground/5' : 'py-8 bg-transparent'}`}>
+    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'py-4 bg-background/80 backdrop-blur-lg border-b border-foreground/5' : 'dark py-8 bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <motion.a
           href="#"
@@ -40,7 +40,7 @@ const Navbar = ({ theme, toggleTheme, onOpenResumeModal }: NavbarProps) => {
           }}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="text-2xl md:text-3xl font-display font-black tracking-tight lowercase cursor-pointer"
+          className="text-foreground text-2xl md:text-3xl font-display font-black tracking-tight lowercase cursor-pointer"
         >
           sourabh<span className="text-accent">.</span>
         </motion.a>
@@ -53,7 +53,7 @@ const Navbar = ({ theme, toggleTheme, onOpenResumeModal }: NavbarProps) => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="text-sm font-medium text-muted hover:text-accent transition-colors"
+              className="text-base font-semibold text-muted hover:text-accent transition-colors"
             >
               <Magnetic strength={0.2}>{link.name}</Magnetic>
             </motion.a>
@@ -69,7 +69,7 @@ const Navbar = ({ theme, toggleTheme, onOpenResumeModal }: NavbarProps) => {
           <Magnetic strength={0.2}>
             <button
               onClick={onOpenResumeModal}
-              className="px-5 py-2.5 bg-accent/10 border border-accent/20 text-accent rounded-full text-sm font-semibold hover:bg-accent hover:text-accent-foreground transition-all duration-300"
+              className="px-6 py-2.5 bg-accent/10 border border-accent/20 text-accent rounded-full text-base font-bold hover:bg-accent hover:text-accent-foreground transition-all duration-300"
             >
               Resume
             </button>

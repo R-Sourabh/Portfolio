@@ -14,7 +14,8 @@ const HorizontalStack = ({ onOpenModal }: HorizontalStackProps) => {
   const allProjects = categoryOrder
     .map(cat => projects[cat])
     .filter(Boolean)
-    .flat();
+    .flat()
+    .reverse();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isStackHovered, setIsStackHovered] = useState(false);
   const mouseX = useMotionValue(0.5);

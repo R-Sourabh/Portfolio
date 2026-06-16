@@ -47,7 +47,7 @@ const MobileNavbar = ({ theme, toggleTheme, onOpenResumeModal }: MobileNavbarPro
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'py-4 bg-background/90 backdrop-blur-lg border-b border-foreground/5' : 'py-6 bg-transparent'}`}>
+      <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'py-4 bg-background/90 backdrop-blur-lg border-b border-foreground/5' : 'dark py-6 bg-transparent'}`}>
         <div className="px-6 flex justify-between items-center">
           <a
             href="#"
@@ -55,7 +55,7 @@ const MobileNavbar = ({ theme, toggleTheme, onOpenResumeModal }: MobileNavbarPro
               e.preventDefault();
               handleNavClick('#');
             }}
-            className="text-2xl font-display font-black tracking-tight lowercase cursor-pointer"
+            className="text-foreground text-2xl font-display font-black tracking-tight lowercase cursor-pointer"
           >
             sourabh<span className="text-accent">.</span>
           </a>
