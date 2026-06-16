@@ -45,6 +45,7 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
   const [isContentRevealed, setIsContentRevealed] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [isVideoEnded, setIsVideoEnded] = useState(false);
+  const [showControls, setShowControls] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const isFullyOutOfView = useRef(false);
 
@@ -57,6 +58,7 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
             setIsContentRevealed(false);
             setIsVideoLoaded(false);
             setIsVideoEnded(false);
+            setShowControls(false);
             if (videoRef.current) {
               videoRef.current.currentTime = 0;
               videoRef.current.play().catch(err => console.log("Video play error on scroll:", err));
@@ -92,6 +94,12 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
     const video = e.currentTarget;
     if (video.currentTime > 0.1 && !isVideoLoaded) {
       setIsVideoLoaded(true);
+      if (audioRef.current) {
+        audioRef.current.play().catch(err => console.log("Audio play error on initial load:", err));
+      }
+    }
+    if (video.currentTime > 1.5 && !showControls) {
+      setShowControls(true);
     }
     if (video.currentTime >= 7 && !isContentRevealed) {
       setIsContentRevealed(true);
@@ -109,6 +117,7 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
   const handleVideoEnded = () => {
     setIsContentRevealed(true);
     setIsVideoEnded(true);
+    setShowControls(false);
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
@@ -116,8 +125,7 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
   };
 
   const handleVideoPlay = () => {
-    setIsVideoLoaded(true);
-    if (audioRef.current) {
+    if (isVideoLoaded && audioRef.current) {
       audioRef.current.play().catch(err => console.log("Audio play error:", err));
     }
   };
@@ -131,6 +139,7 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
   const handleSkipIntro = () => {
     setIsContentRevealed(true);
     setIsVideoEnded(true);
+    setShowControls(false);
     if (videoRef.current) {
       videoRef.current.currentTime = videoRef.current.duration || 23.6;
       videoRef.current.pause();
@@ -274,7 +283,7 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
       </div>
 
       {/* Controls: Skip Intro & Audio Toggle */}
-      {!isVideoEnded && (
+      {!isVideoEnded && showControls && (
         <div className="absolute bottom-10 right-10 z-50 flex items-center gap-3">
           <button
             onClick={toggleMute}

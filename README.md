@@ -21,27 +21,31 @@ The project relies on a modern, performant, and type-safe frontend stack:
 
 The portfolio features several highly interactive, visually engaging sections. Here is how their animations and layouts are structured:
 
-### 1. Custom Interactive Cursor (`CustomCursor`)
+### 1. Landing Page Cinema Experience (`Hero` & `MobileHero`)
+*   **Effect**: A cinematic greeting with an optimized high-definition video background and synced spatial audio background loop.
+*   **How it works**: Detects active playback via progressive frame load checks (`video.currentTime > 0.1`) to smoothly fade in the video background and initialize audio playback in perfect sync. The skip and mute button controls are rendered after `1.5` seconds of actual playback time to allow loading buffer. Skipping the intro or completing the video runtime smoothly triggers the content reveal animations and transitions into displaying the scroll indicator.
+
+### 2. Custom Interactive Cursor (`CustomCursor`)
 *   **Effect**: A two-part mouse tracker consisting of an inner dot and a large outer ring.
 *   **How it works**: Uses Framer Motion's `useSpring` and `useMotionValue` to track the viewport coordinates. When hovering over buttons or links, the outer ring scales up, applies a glassmorphic background blur, and changes color opacity smoothly (`hsl(var(--accent) / 0)` to `hsl(var(--accent) / 0.15)`).
 
-### 2. Skills Showcase Stack (`SkillsStack` & `SkillStackV2`)
+### 3. Skills Showcase Stack (`SkillsStack` & `SkillStackV2`)
 *   **Effect**: A Tinder-like stack of cards that users can drag or swipe to browse different skills categories.
 *   **How it works**: Uses gesture handlers, mouse position delta calculations, and spring-driven translations. When a card is dragged or clicked, it cycles to the bottom of the deck with a smooth slide-back motion.
 
-### 3. GitHub Activity Grid (`GithubActivity`)
+### 4. GitHub Activity Grid (`GithubActivity`)
 *   **Effect**: A detailed contributions calendar that shows GitHub commits and activities across selected years (`Latest`, `2026`, `2025`, `2024`).
 *   **How it works**: Leverages GitHub API/GraphQL logic to fetch year-wise contribution data, mapping it onto a responsive grid container with interactive year filters.
 
-### 4. Architectural Focus Areas Stack (`HorizontalStack`)
+### 5. Architectural Focus Areas Stack (`HorizontalStack`)
 *   **Effect**: A overlapping card stack that spreads out and rotates dynamically in 3D space when the user hovers over the stack container.
 *   **How it works**: Uses a combination of `spreadFactor` springs and mouse tracking. As the mouse moves over the stack, `useTransform` calculates the horizontal displacement (`x`) and rotational lean (`rotateZ`) for each card based on its index. Cards instantly elevate their stacking order (`zIndex`) to 50 on hover without transition glitches.
 
-### 5. Isometric Tech Stack Layers (`TechLayers`)
+### 6. Isometric Tech Stack Layers (`TechLayers`)
 *   **Effect**: A 3D isometric stack of technological blocks representing different development layers (Frontend, State, Commerce Logic, Infrastructure).
 *   **How it works**: Leverages CSS 3D transforms (`rotateX(60deg) rotateZ(-45deg)`) on a container, combined with Framer Motion animating the `z` (depth) translation based on active hover or selection states. Clicking a layer updates the flat dashboard panel below.
 
-### 6. Tech Orbit (`TechOrbit`)
+### 7. Tech Orbit (`TechOrbit`)
 *   **Effect**: Three concentric orbital rings with technical icon badges revolving continuously around a central glowing core.
 *   **How it works**: Orbiting elements are rotated continuously using CSS keyframes or linear Framer Motion loops (`rotate: [0, 360]`). The icons themselves perform a counter-rotation (`rotate: [0, -360]`) at the same speed so they always remain upright.
 
