@@ -44,6 +44,7 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isContentRevealed, setIsContentRevealed] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [isVideoEnded, setIsVideoEnded] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const isFullyOutOfView = useRef(false);
 
@@ -55,6 +56,7 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
             isFullyOutOfView.current = false;
             setIsContentRevealed(false);
             setIsVideoLoaded(false);
+            setIsVideoEnded(false);
             if (videoRef.current) {
               videoRef.current.currentTime = 0;
               videoRef.current.play().catch(err => console.log("Video play error on scroll:", err));
@@ -106,6 +108,7 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
 
   const handleVideoEnded = () => {
     setIsContentRevealed(true);
+    setIsVideoEnded(true);
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
@@ -127,6 +130,7 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
 
   const handleSkipIntro = () => {
     setIsContentRevealed(true);
+    setIsVideoEnded(true);
     if (videoRef.current) {
       videoRef.current.currentTime = videoRef.current.duration || 23.6;
       videoRef.current.pause();
@@ -178,7 +182,7 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
       ref={sectionRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="dark relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-black"
+      className="dark relative min-h-screen flex items-center justify-center pt-24 pb-28 md:pb-36 overflow-hidden bg-black"
     >
       {/* Background Audio */}
       <audio
@@ -270,7 +274,7 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
       </div>
 
       {/* Controls: Skip Intro & Audio Toggle */}
-      {!isContentRevealed && (
+      {!isVideoEnded && (
         <div className="absolute bottom-10 right-10 z-50 flex items-center gap-3">
           <button
             onClick={toggleMute}
@@ -290,7 +294,7 @@ const Hero = ({ onOpenResumeModal }: HeroProps) => {
       )}
 
       {/* Scroll Indicator */}
-      {isContentRevealed && (
+      {isVideoEnded && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

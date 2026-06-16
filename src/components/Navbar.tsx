@@ -45,7 +45,7 @@ const Navbar = ({ theme, toggleTheme, onOpenResumeModal }: NavbarProps) => {
           sourabh<span className="text-accent">.</span>
         </motion.a>
 
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-8">
           {navLinks.map((link, i) => (
             <motion.a
               key={link.name}

@@ -20,6 +20,7 @@ const MobileHero = ({ onOpenResumeModal }: MobileHeroProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isContentRevealed, setIsContentRevealed] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [isVideoEnded, setIsVideoEnded] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const isFullyOutOfView = useRef(false);
 
@@ -31,6 +32,7 @@ const MobileHero = ({ onOpenResumeModal }: MobileHeroProps) => {
             isFullyOutOfView.current = false;
             setIsContentRevealed(false);
             setIsVideoLoaded(false);
+            setIsVideoEnded(false);
             if (videoRef.current) {
               videoRef.current.currentTime = 0;
               videoRef.current.play().catch(err => console.log("Video play error on scroll:", err));
@@ -82,6 +84,7 @@ const MobileHero = ({ onOpenResumeModal }: MobileHeroProps) => {
 
   const handleVideoEnded = () => {
     setIsContentRevealed(true);
+    setIsVideoEnded(true);
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
@@ -103,6 +106,7 @@ const MobileHero = ({ onOpenResumeModal }: MobileHeroProps) => {
 
   const handleSkipIntro = () => {
     setIsContentRevealed(true);
+    setIsVideoEnded(true);
     if (videoRef.current) {
       videoRef.current.currentTime = videoRef.current.duration || 23.6;
       videoRef.current.pause();
@@ -152,7 +156,7 @@ const MobileHero = ({ onOpenResumeModal }: MobileHeroProps) => {
   return (
     <section
       ref={sectionRef}
-      className="dark relative min-h-screen flex flex-col justify-center pt-24 pb-12 overflow-hidden bg-black"
+      className="dark relative min-h-screen flex flex-col justify-center pt-24 pb-28 overflow-hidden bg-black"
     >
       {/* Background Audio */}
       <audio
@@ -234,8 +238,8 @@ const MobileHero = ({ onOpenResumeModal }: MobileHeroProps) => {
       </motion.div>
 
       {/* Controls: Skip Intro & Audio Toggle for Mobile */}
-      {!isContentRevealed && (
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3">
+      {!isVideoEnded && (
+        <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3">
           <button
             onClick={toggleMute}
             className="w-10 h-10 bg-background/40 hover:bg-background/70 border border-foreground/10 backdrop-blur-md rounded-full flex items-center justify-center text-foreground active:scale-95 transition-all shadow-lg"
@@ -254,7 +258,7 @@ const MobileHero = ({ onOpenResumeModal }: MobileHeroProps) => {
       )}
 
       {/* Scroll Indicator for Mobile */}
-      {isContentRevealed && (
+      {isVideoEnded && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

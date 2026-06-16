@@ -7,7 +7,7 @@ import AppMobile from './AppMobile'
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
-  const isMobile = useMediaQuery('(max-width: 768px)')
+  const isMobile = useMediaQuery('(max-width: 1023px)')
 
   useEffect(() => {
     setMounted(true)
